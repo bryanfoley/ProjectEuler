@@ -1,5 +1,5 @@
 /*
- * LargestPalindromProduct.cpp
+ * LargestPalindromeProduct.cpp
  *
  *  Created on: Dec 01, 2016
  *      Author: bryan
@@ -63,15 +63,23 @@ void determineFactorRanges(long &maxDigitsRef,long &maxFactorRef, long &minFacto
 
 bool determinePalindromeProduct(long &maxDigits, list <long> &palindromeProductListRef,long &maxFactorRef, long &minFactorRef){
 	long a, b;
-	for(a = maxFactorRef; a >= minFactorRef; a--){
-		//b=a-1;
-		for(b = a-1; b >= minFactorRef;b--){
-			long candidate = a*b;
-			if (isPalindrome(candidate)){
+	long max, min, minPalindrome;
+	long candidate;
+	max = maxFactorRef;
+	min = minFactorRef;
+	minPalindrome = max*min;
+
+	for(a=max; a>=min;a--){
+		for (b=max; b>=min;b--){
+			candidate = a*b;
+			if(isPalindrome(candidate) && (candidate>minPalindrome)){
+				min=b;
+				minPalindrome=candidate;
 				palindromeProductListRef.push_back(candidate);
 			}
 		}
 	}
+
 	return true;
 }
 
