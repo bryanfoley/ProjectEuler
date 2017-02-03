@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <list>
+#include <cmath>
 #include <math.h>
 #include <time.h>
 
@@ -23,6 +24,7 @@ int main() {
 	list <long> primes;
 	primes.push_back(2);
 	primes.push_back(3);
+	primes.push_back(5);
 	time_t start, end;
 
 	cin >> n;
@@ -48,7 +50,7 @@ int main() {
 
 bool testForPrimeness(long &numberRef){
 	long i=0;
-	for (i = 3; i < numberRef;){
+	for (i = 3; i < sqrt(numberRef)+1;){
 		if (numberRef%i==0){
 			return false;
 		}
