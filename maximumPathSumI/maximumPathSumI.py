@@ -25,24 +25,62 @@ tri = np.array((
 
 left_sum = 0
 right_sum = 0
-total = []	
+left_left_sum = 0
+right_right_sum = 0
+left_right_sum = 0
+right_left_sum = 0
+total = []
+print tri
 for row in range(0,tri.shape[0]):
     if row == 0:
         root_col = int(((len(tri[row])-1)/2))
+        print "row: ",row
+        print "    root_col: ", root_col
     else:
             lc = root_col-1
             rc = root_col+1
-            i = 1
+            i = 0
+            ll = False
+            lr = False
+            rr = False
+            rl = False
+            print "row: ",row
 	    for rows in range(row,tri.shape[0]):
-		left_sum+=tri[rows,root_col-i]
-		right_sum+=tri[rows,root_col+i]
+		left_left_sum+=tri[rows,lc-i]
+                left_right_sum+=tri[rows,lc+i]
+		right_right_sum+=tri[rows,rc+i]
+                right_left_sum+=tri[rows,rc-i]
                 i+=1
-	    if left_sum > right_sum:
-		root_col = root_col-1
+	    if left_left_sum > left_right_sum:
+		left_sum = left_left_sum
+                ll = True
+               
 	    else:
-		root_col = root_col+1
+		left_sum = left_right_sum
+                lr = True
+
+            if right_right_sum > right_left_sum:
+	        right_sum = right_right_sum
+                rr = True
+
+	    else:
+                right_sum = right_left_sum 
+                rl = True
+
+            if left_sum > right_sum:
+                root_col = lc-int(ll)+int(lr)
+                total.append(tri[row, root_col])
+            else:
+                root_col = rc-int(ll)+int(lr)
+                total.append(tri[row, root_col])
+            print "    root_col: ", root_col
     total.append(tri[row, root_col])
     left_sum = 0
     right_sum = 0
+    left_left_sum = 0
+    right_right_sum = 0
+    left_right_sum = 0
+    right_left_sum = 0
+
 print total
 print sum(total)
