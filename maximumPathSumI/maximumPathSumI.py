@@ -18,10 +18,12 @@ tri = np.array((
 [04, 00, 62, 00, 98, 00, 27, 00, 23, 00, 9, 00, 70, 00, 98, 00, 73, 00, 93, 00, 38, 00, 53, 00, 60, 00, 04, 00, 23]))
 
 tri = np.array((
-[0,0,0,3,0,0,0],
-[0,0,7,0,4,0,0],
-[0,2,0,4,0,6,0],
-[8,0,5,0,9,0,3]))
+[0,0,0,0,3,0,0,0,0],
+[0,0,0,7,0,4,0,0,0],
+[0,0,2,0,4,0,6,0,0],
+[0,8,0,5,0,9,0,3,0],
+[10,0,12,0,0,0,0,0,0]
+))
 
 left_sum = 0
 right_sum = 0
@@ -31,6 +33,7 @@ left_right_sum = 0
 right_left_sum = 0
 total = []
 root_col = 0
+print tri.shape[0]
 print tri
 for row in range(0,tri.shape[0]):
     if row == 0:
@@ -56,8 +59,28 @@ for row in range(0,tri.shape[0]):
             right_left_sum+=tri[rows,rc-i]
             print "        rows: %s, left_left: %s"%(rows, tri[rows,lc-i])
             print "        rows: %s, left_right: %s"%(rows, tri[rows,lc+i])
+            print "        rows: %s, right_right: %s"%(rows, tri[rows,rc+i])
+            print "        rows: %s, right_left: %s"%(rows, tri[rows,rc-i])
             i+=1
+        left_left_sum+=lc
+        left_right_sum+=lc
+        right_left_sum+=rc
+        right_right_sum+=rc
+        print "    lc: ", tri[row][lc]
+        print "    left_left_sum: ",left_left_sum
+        print "    left_right_sum: ",left_right_sum
+        print "    rc: ", tri[row][rc]
+        print "    right_right_sum: ",right_right_sum
+        print "    right_left_sum: ",right_left_sum
 
+        if (lc > rc and (right_left_sum > (right_right_sum and left_left_sum and left_right_sum))):
+            total.append(lc)
+            root_col = root_col
+            #continue
+        elif(rc > lc and (left_right_sum > (right_right_sum and left_left_sum and right_left_sum))):
+            total.append(rc)
+            root_col = root_col
+            #continue
         if left_left_sum > left_right_sum:
             left_sum = left_left_sum
             ll = True
@@ -82,18 +105,12 @@ for row in range(0,tri.shape[0]):
             total.append(tri[row, root_col])
         print "    root_col: ", root_col
         print "    value: ", tri[row][root_col]
-        print "    lc: ", tri[row][lc]
-        print "    left_left_sum: ",left_left_sum
-        print "    left_right_sum: ",left_right_sum
-        print "    rc: ", tri[row][rc]
-        print "    rigjt_right_sum: ",right_right_sum
-        print "    left_left_sum: ",right_left_sum
-    left_sum = 0
-    right_sum = 0
-    left_left_sum = 0
-    right_right_sum = 0
-    left_right_sum = 0
-    right_left_sum = 0
+        left_sum = 0
+        right_sum = 0
+        left_left_sum = 0
+        right_right_sum = 0
+        left_right_sum = 0
+        right_left_sum = 0
 
 print total
 print sum(total)
