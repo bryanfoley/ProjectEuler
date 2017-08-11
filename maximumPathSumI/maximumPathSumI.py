@@ -30,51 +30,64 @@ right_right_sum = 0
 left_right_sum = 0
 right_left_sum = 0
 total = []
+root_col = 0
 print tri
 for row in range(0,tri.shape[0]):
     if row == 0:
         root_col = int(((len(tri[row])-1)/2))
         print "row: ",row
         print "    root_col: ", root_col
+        print "    value: ", tri[row][root_col]
+        total.append(tri[row, root_col])
     else:
-            lc = root_col-1
-            rc = root_col+1
-            i = 0
-            ll = False
-            lr = False
-            rr = False
-            rl = False
-            print "row: ",row
-	    for rows in range(row,tri.shape[0]):
-		left_left_sum+=tri[rows,lc-i]
-                left_right_sum+=tri[rows,lc+i]
-		right_right_sum+=tri[rows,rc+i]
-                right_left_sum+=tri[rows,rc-i]
-                i+=1
-	    if left_left_sum > left_right_sum:
-		left_sum = left_left_sum
-                ll = True
-               
-	    else:
-		left_sum = left_right_sum
-                lr = True
+        lc = root_col-1
+        rc = root_col+1
+        i = 1
+        ll = False
+        lr = False
+        rr = False
+        rl = False
+        print "row: ",row
 
-            if right_right_sum > right_left_sum:
-	        right_sum = right_right_sum
-                rr = True
+        for rows in range(row+1,tri.shape[0]):
+            left_left_sum+=tri[rows,lc-i]
+            left_right_sum+=tri[rows,lc+i]
+            right_right_sum+=tri[rows,rc+i]
+            right_left_sum+=tri[rows,rc-i]
+            print "        rows: %s, left_left: %s"%(rows, tri[rows,lc-i])
+            print "        rows: %s, left_right: %s"%(rows, tri[rows,lc+i])
+            i+=1
 
-	    else:
-                right_sum = right_left_sum 
-                rl = True
+        if left_left_sum > left_right_sum:
+            left_sum = left_left_sum
+            ll = True
 
-            if left_sum > right_sum:
-                root_col = lc-int(ll)+int(lr)
-                total.append(tri[row, root_col])
-            else:
-                root_col = rc-int(ll)+int(lr)
-                total.append(tri[row, root_col])
-            print "    root_col: ", root_col
-    total.append(tri[row, root_col])
+        else:
+            left_sum = left_right_sum
+            lr = True
+
+        if right_right_sum > right_left_sum:
+            right_sum = right_right_sum
+            rr = True
+
+        else:
+            right_sum = right_left_sum
+            rl = True
+        print "    left_sum: %s, right_sum: %s"%(left_sum,right_sum)
+        if left_sum > right_sum:
+            root_col = lc
+            total.append(tri[row, root_col])
+        else:
+            root_col = rc
+            total.append(tri[row, root_col])
+        print "    root_col: ", root_col
+        print "    value: ", tri[row][root_col]
+        print "    lc: ", tri[row][lc]
+        print "    left_left_sum: ",left_left_sum
+        print "    left_right_sum: ",left_right_sum
+        print "    rc: ", tri[row][rc]
+        print "    rigjt_right_sum: ",right_right_sum
+        print "    left_left_sum: ",right_left_sum
     left_sum = 0
     right_sum = 0
     left_left_sum = 0
