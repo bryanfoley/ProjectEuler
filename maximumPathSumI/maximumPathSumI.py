@@ -17,100 +17,57 @@ tri = np.array((
 [00, 63, 00, 66, 00, 04, 00, 68, 00, 89, 00, 53, 00, 67, 00, 30, 00, 73, 00, 16, 00, 69, 00, 87, 00, 40, 00, 31, 00],
 [04, 00, 62, 00, 98, 00, 27, 00, 23, 00, 9, 00, 70, 00, 98, 00, 73, 00, 93, 00, 38, 00, 53, 00, 60, 00, 04, 00, 23]))
 
-tri = np.array((
-[0,0,0,0,3,0,0,0,0],
-[0,0,0,7,0,4,0,0,0],
-[0,0,2,0,4,0,6,0,0],
-[0,8,0,5,0,9,0,3,0],
-[10,0,12,0,0,0,0,0,0]
-))
+# tri = np.array((
+# [0,0,0,3,0,0,0],
+# [0,0,7,0,4,0,0],
+# [0,2,0,4,0,6,0],
+# [8,0,5,0,9,0,3]
+# ))
 
-left_sum = 0
-right_sum = 0
-left_left_sum = 0
-right_right_sum = 0
-left_right_sum = 0
-right_left_sum = 0
-total = []
-root_col = 0
-print tri.shape[0]
-print tri
-for row in range(0,tri.shape[0]):
-    if row == 0:
-        root_col = int(((len(tri[row])-1)/2))
-        print "row: ",row
-        print "    root_col: ", root_col
-        print "    value: ", tri[row][root_col]
-        total.append(tri[row, root_col])
-    else:
-        lc = root_col-1
-        rc = root_col+1
-        i = 1
-        ll = False
-        lr = False
-        rr = False
-        rl = False
-        print "row: ",row
+nRows, nCols = tri.shape[0],tri.shape[1]
+rowUpdate,colUpdate=0,2
+rowShift, colShift = 1, nCols
+leftShiftRow, leftShiftCol = 0,0
+middleShiftRow,middleShiftCol = 1,1
+rightShiftRow, rightShiftCol = 0,leftShiftCol+2
+rowShifts=0
 
-        for rows in range(row+1,tri.shape[0]):
-            left_left_sum+=tri[rows,lc-i]
-            left_right_sum+=tri[rows,lc+i]
-            right_right_sum+=tri[rows,rc+i]
-            right_left_sum+=tri[rows,rc-i]
-            print "        rows: %s, left_left: %s"%(rows, tri[rows,lc-i])
-            print "        rows: %s, left_right: %s"%(rows, tri[rows,lc+i])
-            print "        rows: %s, right_right: %s"%(rows, tri[rows,rc+i])
-            print "        rows: %s, right_left: %s"%(rows, tri[rows,rc-i])
-            i+=1
-        left_left_sum+=lc
-        left_right_sum+=lc
-        right_left_sum+=rc
-        right_right_sum+=rc
-        print "    lc: ", tri[row][lc]
-        print "    left_left_sum: ",left_left_sum
-        print "    left_right_sum: ",left_right_sum
-        print "    rc: ", tri[row][rc]
-        print "    right_right_sum: ",right_right_sum
-        print "    right_left_sum: ",right_left_sum
+while rowShifts < nRows-1:
+    print rowShifts
+    columnShifts = 0
+    while columnShifts < nCols/(colUpdate+rowUpdate):
+        left,middle,right = tri[nRows-(rowShift+leftShiftRow)][nCols-(colShift+leftShiftCol)],\
+        tri[nRows-(rowShift+middleShiftRow)][nCols-(colShift-middleShiftCol)],\
+        tri[nRows-(rowShift+rightShiftRow)][nCols-(colShift-rightShiftCol)]
+        print left,middle,right
+        left_sum = left+middle
+        right_sum = middle+right
+        print "Left sum = %d, Right sum = %d"%(left_sum, right_sum)
+        # update the middle to the new max
+        tri[nRows-(rowShift+middleShiftRow)][nCols-(colShift-middleShiftCol)] = left_sum if (left_sum> right_sum) else right_sum 
 
-        if (lc > rc and (right_left_sum > (right_right_sum and left_left_sum and left_right_sum))):
-            total.append(lc)
-            root_col = root_col
-            #continue
-        elif(rc > lc and (left_right_sum > (right_right_sum and left_left_sum and right_left_sum))):
-            total.append(rc)
-            root_col = root_col
-            #continue
-        if left_left_sum > left_right_sum:
-            left_sum = left_left_sum
-            ll = True
+        colShift-=colUpdate
+        print "colShift = %d"%colShift
+        columnShifts+=1
 
-        else:
-            left_sum = left_right_sum
-            lr = True
+    for i in range(0,nCols):
+        tri[nRows-rowShift][i] = 0
+    print tri
+    rowUpdate+=1
+    colShift=nCols-rowUpdate
+    rowShift+=rowUpdate
+    rowShifts+=1
 
-        if right_right_sum > right_left_sum:
-            right_sum = right_right_sum
-            rr = True
+    if rowShifts == nRows-2:
+        print "Final result"
+        # Special case of the top of the pyramid
+        left_sum = tri[0][(nCols-1)/2]+ tri[1][(nCols/2)-1]
+        right_sum = tri[0][(nCols-1)/2]+ tri[1][(nCols/2)+1]
 
-        else:
-            right_sum = right_left_sum
-            rl = True
-        print "    left_sum: %s, right_sum: %s"%(left_sum,right_sum)
-        if left_sum > right_sum:
-            root_col = lc
-            total.append(tri[row, root_col])
-        else:
-            root_col = rc
-            total.append(tri[row, root_col])
-        print "    root_col: ", root_col
-        print "    value: ", tri[row][root_col]
-        left_sum = 0
-        right_sum = 0
-        left_left_sum = 0
-        right_right_sum = 0
-        left_right_sum = 0
-        right_left_sum = 0
+        tri[0][(nCols-1)/2] = left_sum if (left_sum> right_sum) else right_sum
+        for i in range(0, nCols):
+            tri[1][i] = 0
 
-print total
-print sum(total)
+        print tri
+
+        break
