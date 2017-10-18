@@ -19,16 +19,26 @@ def d(number):
 totalSum=0
     
 results = collections.OrderedDict()
-for number in range(1,1001):
+for number in range(1,10001):
     d(number)
 for key in results.keys():
     try:
         #list of keys that have the same value as the current key
-        final[key]=[k for (k, v) in results.iteritems() if v == int(key)]
-        if len(final[key])>0:
-            print "key: %s, keys with same value: %s"%(key,final[key])
+        temp=[k for (k, v) in results.iteritems() if v == int(key)]
+        if len(temp)>0:
+            final[key]=temp
     except:
         continue
 
-print results['220']
+for key in final.keys():
+    temp = final[str(key)]
+    for item in temp:
+        try:
+            if str(key) in final[str(item)]:
+                if key!=item:
+                    totalSum+=(int(key)+int(item))
+                    del final[key]
+        except Exception as exc:
+            continue
+
 print totalSum
