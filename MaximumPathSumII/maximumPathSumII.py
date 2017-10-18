@@ -1,4 +1,4 @@
-import os, math
+import math
 table = [map(int,s.split()) for s in open("p067_triangle.txt").readlines()]
 
 for row in range(len(table)-1,0,-1):
