@@ -24,7 +24,6 @@ def getNthPermutation(permutation,arrayOfDigits):
 def main():
     permutation = int(sys.argv[1])
     arrayOfDigits = sys.argv[2].split(',')
-    #arrayOfDigits = [int(x) for x in arrayOfDigits]
     print getNthPermutation(permutation,arrayOfDigits)
 
 if __name__ == "__main__":
